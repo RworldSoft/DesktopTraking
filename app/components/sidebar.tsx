@@ -61,22 +61,27 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       hasDropdown: true,
       subItems: [
         { label: "Items", href: "/inventory/items" },
-        { label: "Warehouses", href: "/inventory/warehouses" },
+        { label: "Manage Store", href: "/inventory/manage-store" },
         { label: "Price Lists", href: "/inventory/price-lists" },
       ],
     },
-    { icon: Users, label: "Lead", href: "/lead" },
+    // { icon: Users, label: "Lead", href: "/lead" },
     {
       icon: Users,
       label: "Parties",
       href: "/parties",
       hasDropdown: true,
+      subItems: [
+        { label: "Customers", href: "/parties/customers" },
+        { label: "Suppliers", href: "/parties/suppliers" },
+      ],
     },
     {
       icon: ShoppingCart,
       label: "Purchase",
       href: "/purchase",
       hasDropdown: true,
+      
     },
     { icon: Truck, label: "Van Sale", href: "/van-sale" },
     {
@@ -157,7 +162,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                     )}
                   </button>
                   {isMenuOpen && item.subItems && (
-                    <div className="ml-3 mt-0.5 border-l-2 border-blue-600 pl-3 space-y-0.5">
+                    <div className="ml-3 mt-0.5 border-l-2 border-primary/50 pl-3 space-y-0.5">
                       {item.subItems.map((subItem) => (
                         <Link
                           key={subItem.href}

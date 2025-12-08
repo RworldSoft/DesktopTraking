@@ -18,8 +18,31 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   return (
-    <header className="bg-white border-b border-gray-200 h-12 flex items-center px-4">
-   
+    <header className="bg-white border-b border-gray-200 h-12 flex items-center justify-between px-4">
+      <div className="flex items-center gap-4">
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden text-gray-600 hover:text-gray-900"
+        >
+          <Menu size={20} />
+        </button>
+
+       
+      </div>
+
+      {/* <div className="flex items-center gap-3 flex-1 max-w-xl mx-4">
+        <div className="relative flex-1">
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={18}
+          />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div> */}
 
       <div className="flex items-center gap-3">
         <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
@@ -33,7 +56,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
           onMouseLeave={() => setShowProfileMenu(false)}
         >
           <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 rounded-lg px-2 py-1.5 transition-colors">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-semibold">
               JD
             </div>
             <ChevronDown size={16} className="text-gray-600" />
