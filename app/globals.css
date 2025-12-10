@@ -46,7 +46,7 @@ body {
 /* Specifically target body and html scrollbars */
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 html::-webkit-scrollbar-track,

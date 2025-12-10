@@ -52,30 +52,32 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/20 z-40 transition-opacity"
+          className="fixed inset-0 bg-black/30 z-40 transition-opacity"
           onClick={onClose}
         />
       )}
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-[90vw] md:w-[600px] lg:w-[700px] xl:w-[800px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b">
-          <h2 className="text-2xl font-semibold text-gray-800">Create Items</h2>
-          <div className="flex items-center gap-3">
+        <div className="flex items-center h-12 justify-between px-4 sm:px-6 py-3 border-b bg-white sticky top-0 z-10">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+            Create Items
+          </h2>
+          <div className="flex items-center gap-2">
             <button
               onClick={handleSave}
-              className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-medium"
+              className="px-4 py-1.5 text-sm bg-primary text-white rounded hover:bg-primary/90 transition-colors font-medium"
             >
               Save
             </button>
             <button
               onClick={onClose}
-              className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors font-medium"
+              className="px-4 py-1.5 text-sm text-gray-600 hover:text-gray-800 transition-colors font-medium"
             >
               Cancel
             </button>
@@ -83,18 +85,18 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
         </div>
 
         {/* Scrollable Content */}
-        <div className="h-[calc(100%-73px)] overflow-y-auto">
-          <div className="p-6 space-y-6">
+        <div className="h-[calc(100%-57px)] overflow-y-auto overflow-x-hidden">
+          <div className="p-2 sm:p-3 space-y-4">
             {/* General Details */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-700 mb-4">
+            <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
+              <h3 className="text-base font-medium text-gray-700 mb-3">
                 General Details
               </h3>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {/* Item Name */}
-                <div className="lg:col-span-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="sm:col-span-1">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Item Name<span className="text-red-500">*</span>
                   </label>
                   <input
@@ -103,48 +105,25 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.itemName}
                     onChange={handleInputChange}
                     placeholder="Name of item"
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
-                </div>
-
-                {/* Activate Item Toggle */}
-                <div className="lg:col-span-1 flex items-end">
-                  <label className="flex items-center cursor-pointer">
-                    <div className="relative">
-                      <input
-                        type="checkbox"
-                        name="isActive"
-                        checked={formData.isActive}
-                        onChange={handleInputChange}
-                        className="sr-only"
-                      />
-                      <div
-                        className={`w-14 h-8 rounded-full transition-colors ${
-                          formData.isActive ? "bg-blue-600" : "bg-gray-300"
-                        }`}
-                      ></div>
-                      <div
-                        className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-transform ${
-                          formData.isActive ? "transform translate-x-6" : ""
-                        }`}
-                      ></div>
-                    </div>
-                    <span className="ml-3 text-sm font-medium text-gray-700">
-                      Activate item
-                    </span>
-                  </label>
                 </div>
 
                 {/* Unit */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Unit<span className="text-red-500">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                      Unit<span className="text-red-500">*</span>
+                    </label>
+                    <button className="px-3 text-primary hover:text-blue-700 font-medium text-xs whitespace-nowrap">
+                      + New
+                    </button>
+                  </div>
                   <select
                     name="unit"
                     value={formData.unit}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
                   >
                     <option value="">Select Unit</option>
                     <option value="pcs">Pieces</option>
@@ -155,11 +134,11 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
 
                 {/* Sell Price */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Sell price<span className="text-red-500">*</span>
                   </label>
                   <div className="flex">
-                    <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l">
+                    <span className="inline-flex items-center px-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l text-sm">
                       ₹
                     </span>
                     <input
@@ -168,18 +147,18 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                       value={formData.sellPrice}
                       onChange={handleInputChange}
                       placeholder="Sale-price"
-                      className="flex-1 px-4 py-2 border border-x-0 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="flex-1 min-w-0 px-2 py-1.5 text-sm border border-x-0 border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-                    <select className="px-3 py-2 border border-l-0 border-gray-300 rounded-r bg-white text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                      <option>Excl. of Tax</option>
-                      <option>Incl. of Tax</option>
+                    <select className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs focus:ring-2 focus:ring-primary outline-none">
+                      <option>Excl. Tax</option>
+                      <option>Incl. Tax</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Item Code */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Item Code
                   </label>
                   <input
@@ -188,13 +167,60 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.itemCode}
                     onChange={handleInputChange}
                     placeholder="Item code"
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
 
+                {/* Category */}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                      Category
+                    </label>
+                    <button className="px-3  text-primary hover:text-blue-700 font-medium text-xs whitespace-nowrap">
+                      + New
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
+                    >
+                      <option value="">Select Category</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="clothing">Clothing</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Brand */}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                      Brand
+                    </label>
+                    <button className="px-3 text-primary hover:text-blue-700 font-medium text-xs whitespace-nowrap">
+                      + New
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <select
+                      name="brand"
+                      value={formData.brand}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
+                    >
+                      <option value="">Select Brand</option>
+                      <option value="brand1">Brand 1</option>
+                      <option value="brand2">Brand 2</option>
+                    </select>
+                  </div>
+                </div>
                 {/* Item Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Item Description
                   </label>
                   <textarea
@@ -202,69 +228,25 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.itemDescription}
                     onChange={handleInputChange}
                     placeholder="Item description"
-                    rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                    rows={2}
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none"
                   />
-                </div>
-
-                {/* Category */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
-                  </label>
-                  <div className="flex gap-2">
-                    <select
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
-                    >
-                      <option value="">Select Category</option>
-                      <option value="electronics">Electronics</option>
-                      <option value="clothing">Clothing</option>
-                    </select>
-                    <button className="px-4 py-2 text-blue-600 hover:text-blue-700 font-medium text-sm whitespace-nowrap">
-                      + New
-                    </button>
-                  </div>
-                </div>
-
-                {/* Brand */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Brand
-                  </label>
-                  <div className="flex gap-2">
-                    <select
-                      name="brand"
-                      value={formData.brand}
-                      onChange={handleInputChange}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
-                    >
-                      <option value="">Select Brand</option>
-                      <option value="brand1">Brand 1</option>
-                      <option value="brand2">Brand 2</option>
-                    </select>
-                    <button className="px-4 py-2 text-blue-600 hover:text-blue-700 font-medium text-sm whitespace-nowrap">
-                      + New
-                    </button>
-                  </div>
                 </div>
               </div>
 
               {/* Upload Images */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="mt-4">
+                <label className="block text-xs font-medium text-gray-700 mb-1.5">
                   Upload images
                 </label>
-                <div className="flex gap-3 overflow-x-auto pb-2">
+                <div className="flex gap-2 pb-2">
                   {[...Array(5)].map((_, index) => (
                     <div key={index} className="relative flex-shrink-0">
-                      <div className="w-24 h-24 border-2 border-dashed border-gray-300 rounded flex items-center justify-center hover:border-gray-400 transition-colors cursor-pointer bg-gray-50">
-                        <Plus className="w-8 h-8 text-gray-400" />
+                      <div className="w-20 h-20 border-2 border-dashed border-gray-300 rounded flex items-center justify-center hover:border-gray-400 transition-colors cursor-pointer bg-gray-50">
+                        <Plus className="w-6 h-6 text-gray-400" />
                       </div>
-                      <button className="absolute -top-2 -right-2 w-6 h-6 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700">
-                        <X className="w-4 h-4 text-white" />
+                      <button className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700">
+                        <X className="w-3 h-3 text-white" />
                       </button>
                     </div>
                   ))}
@@ -273,15 +255,15 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
             </div>
 
             {/* Price Details */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-700 mb-4">
+            <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
+              <h3 className="text-base font-medium text-gray-700 mb-3">
                 Price Details
               </h3>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {/* MRP */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     MRP
                   </label>
                   <input
@@ -290,17 +272,17 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.mrp}
                     onChange={handleInputChange}
                     placeholder="MRP"
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
 
                 {/* Purchase Price */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Purchase price
                   </label>
                   <div className="flex">
-                    <span className="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l">
+                    <span className="inline-flex items-center px-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l text-sm">
                       ₹
                     </span>
                     <input
@@ -309,18 +291,18 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                       value={formData.purchasePrice}
                       onChange={handleInputChange}
                       placeholder="Purchase"
-                      className="flex-1 px-4 py-2 border border-x-0 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="flex-1 min-w-0 px-2 py-1.5 text-sm border border-x-0 border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-                    <select className="px-3 py-2 border border-l-0 border-gray-300 rounded-r bg-white text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                      <option>Excl. of Tax</option>
-                      <option>Incl. of Tax</option>
+                    <select className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs focus:ring-2 focus:ring-primary outline-none">
+                      <option>Excl. Tax</option>
+                      <option>Incl. Tax</option>
                     </select>
                   </div>
                 </div>
 
                 {/* HSN Code */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     HSN Code
                   </label>
                   <input
@@ -329,20 +311,20 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.hsnCode}
                     onChange={handleInputChange}
                     placeholder="HSN code"
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
 
                 {/* GST % */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     GST %
                   </label>
                   <select
                     name="gstPercent"
                     value={formData.gstPercent}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
                   >
                     <option value="">Select Tax</option>
                     <option value="0">0%</option>
@@ -355,14 +337,14 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
 
                 {/* Cess % */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Cess %
                   </label>
                   <select
                     name="cessPercent"
                     value={formData.cessPercent}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
                   >
                     <option value="">Select Cess</option>
                     <option value="0">0%</option>
@@ -373,7 +355,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
 
                 {/* Discount */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Discount
                   </label>
                   <div className="flex">
@@ -383,13 +365,13 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                       value={formData.discount}
                       onChange={handleInputChange}
                       placeholder="Discount"
-                      className="flex-1 px-4 py-2 border border-r-0 border-gray-300 rounded-l focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-r-0 border-gray-300 rounded-l focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
                     <select
                       name="discountType"
                       value={formData.discountType}
                       onChange={handleInputChange}
-                      className="px-3 py-2 border border-l-0 border-gray-300 rounded-r bg-white text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs focus:ring-2 focus:ring-primary outline-none"
                     >
                       <option>Amount</option>
                       <option>Percentage</option>
@@ -399,7 +381,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
 
                 {/* Offer Text */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Offer text
                   </label>
                   <input
@@ -408,22 +390,22 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.offerText}
                     onChange={handleInputChange}
                     placeholder="Show offer"
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
               </div>
             </div>
 
             {/* Stock Details */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-medium text-gray-700 mb-4">
+            <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
+              <h3 className="text-base font-medium text-gray-700 mb-3">
                 Stock Details
               </h3>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {/* Stock */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Stock
                   </label>
                   <input
@@ -432,7 +414,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.stock}
                     onChange={handleInputChange}
                     placeholder="Stock"
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
               </div>

@@ -9,13 +9,23 @@ import {
   LogOut,
 } from "lucide-react";
 import { useState } from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 interface NavbarProps {
   onMenuClick: () => void;
 }
 
 export default function Navbar({ onMenuClick }: NavbarProps) {
+  const router = useRouter();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogout = () => {
+    Cookies.remove("token"); // remove token
+    setShowLogoutModal(false); // close modal
+    router.push("/login"); // redirect to login
+  };
 
   return (
     <header className="bg-white border-b border-gray-200 h-12 flex items-center justify-between px-4">
@@ -26,8 +36,6 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
         >
           <Menu size={20} />
         </button>
-
-       
       </div>
 
       {/* <div className="flex items-center gap-3 flex-1 max-w-xl mx-4">
@@ -81,7 +89,10 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 
               <div className="border-t border-gray-200 my-1"></div>
 
-              <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+              <button
+                onClick={() => setShowLogoutModal(true)}
+                className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+              >
                 <LogOut size={16} />
                 <span>Logout</span>
               </button>
@@ -89,6 +100,36 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
           )}
         </div>
       </div>
+
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-80 p-6 rounded-lg shadow-xl">
+            <h2 className="text-lg font-bold mb-4 text-gray-800">
+              Confirm Logout
+            </h2>
+
+            <p className="text-gray-600 text-sm mb-6">
+              Are you sure you want to log out?
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="px-4 py-2 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
