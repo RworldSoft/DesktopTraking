@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { loginUser } from "@/lib/api/auth";
+import Link from "next/link";
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -67,6 +69,7 @@ export default function LoginPage() {
         backgroundImage: "url('/login3.jpg')", // <-- put your image here
       }}
     >
+    <Link href="/" className="absolute top-4 left-4 text-white" >Home</Link>
       <div className="bg-white backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
