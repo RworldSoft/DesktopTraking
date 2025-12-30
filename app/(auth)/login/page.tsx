@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { loginUser } from "@/lib/api/auth";
 import Link from "next/link";
-
+import OtpLogin from "./otpLogin";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,7 +17,6 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
     if (!email || !password) {
       toast.error("Please fill in all fields");
       return;
@@ -29,28 +27,21 @@ export default function LoginPage() {
     try {
       const res = await loginUser(email, password);
 
-      // Check if response has token
       if (!res?.token) {
         throw new Error("Invalid response from server");
       }
 
-      // Save token in cookie
-      Cookies.set("token", res.token, {
-        expires: 7,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
-      });
+      // ✅ Save token in localStorage
+      localStorage.setItem("token", res.token);
 
       toast.success("Login successful! Redirecting...");
 
-      // Small delay to show success message
       setTimeout(() => {
-        router.push("/");
+        router.replace("/");
       }, 500);
     } catch (err: any) {
       console.error("Login error:", err);
 
-      // Handle different error types
       const errorMessage =
         err.response?.data?.message ||
         err.message ||
@@ -66,11 +57,14 @@ export default function LoginPage() {
     <div
       className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center"
       style={{
-        backgroundImage: "url('/login3.jpg')", // <-- put your image here
+        backgroundImage: "url('/login3.jpg')",
       }}
     >
-    <Link href="/" className="absolute top-4 left-4 text-white" >Home</Link>
-      <div className="bg-white backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md">
+      <Link href="/" className="absolute top-4 left-4 text-white">
+        Home
+      </Link>
+
+      {/* <div className="bg-white backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
         <form className="space-y-4" onSubmit={handleLogin}>
@@ -108,7 +102,8 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-      </div>
+      </div> */}
+      <OtpLogin />
     </div>
   );
 }

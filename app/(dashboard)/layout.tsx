@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Sidebar from "../../components/sidebar";
 import Navbar from "../../components/navbar";
-
+import AuthGuard from "@/components/AuthGuard";
 
 export default function DashboardLayout({
   children,
@@ -12,22 +12,24 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+    <AuthGuard>
+      <div className="flex h-screen bg-gray-100">
+        <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="flex-1 overflow-y-auto p-3">{children}</main>
+          <main className="flex-1 overflow-y-auto p-3">{children}</main>
+        </div>
+
+        {/* Mobile overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 bg-opacity-50 z-40 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
       </div>
-
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-    </div>
+    </AuthGuard>
   );
 }
