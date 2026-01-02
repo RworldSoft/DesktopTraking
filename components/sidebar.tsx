@@ -68,13 +68,13 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     // { icon: Users, label: "Lead", href: "/lead" },
     {
       icon: Users,
-      label: "Party",
-      href: "/party",
-      hasDropdown: false,
-      // subItems: [
-      //   { label: "Customers", href: "/parties/customers" },
-      //   { label: "Suppliers", href: "/parties/suppliers" },
-      // ],
+      label: "Parties",
+      href: "/parties",
+      hasDropdown: true,
+      subItems: [
+        { label: "Customers", href: "/parties/customers" },
+        { label: "Suppliers", href: "/parties/suppliers" },
+      ],
     },
     {
       icon: ShoppingCart,

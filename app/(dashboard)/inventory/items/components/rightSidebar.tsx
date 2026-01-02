@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { CompressedImageResult } from "@/utils/ImageUploadUtils";
 import LocalImageUpload from "@/components/imageUpload";
+import AddUnitModal from "./AddUnitModal";
+import AddCategoryModal from "./AddCategoryModal";
 
 interface CreateItemsDrawerProps {
   isOpen: boolean;
@@ -8,16 +10,22 @@ interface CreateItemsDrawerProps {
 }
 
 const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
+  const [openUnit, setOpenUnit] = useState(false);
+  const [openCategory, setOpenCategory] = useState(false);
+  const [images, setImages] = useState<CompressedImageResult[]>([]);
+
   const [formData, setFormData] = useState({
     itemName: "",
     unit: "",
     sellPrice: "",
+    sellPriceTax: "Excl. Tax",
     itemCode: "",
     itemDescription: "",
     category: "",
     brand: "",
     mrp: "",
     purchasePrice: "",
+    purchasePriceTax: "Excl. Tax",
     hsnCode: "",
     gstPercent: "",
     cessPercent: "",
@@ -27,8 +35,6 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
     stock: "",
     isActive: false,
   });
-
-  const [images, setImages] = useState<CompressedImageResult[]>([]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -43,13 +49,21 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
     }));
   };
 
-  const handleSave = () => {
-    // Extract only the paths from images
-    const imagePaths = images.map((img) => img.path);
+  const handleSaveCategory = (data: {
+    name: string;
+    description?: string;
+    status: "Active" | "Inactive";
+  }) => {
+    console.log(data);
+    // 👉 Call Stock It API here
+    // POST /categories
+  };
 
+  const handleSave = () => {
+    const imagePaths = images.map((img) => img.path);
     const dataToSave = {
       ...formData,
-      images: imagePaths, // Only paths are saved
+      images: imagePaths,
     };
 
     console.log("📦 Form data to save:", dataToSave);
@@ -61,13 +75,6 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
         originalName: img.originalName,
       }))
     );
-
-    // In future, you'll send this to your backend API:
-    // await fetch('/api/items', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(dataToSave)
-    // });
 
     alert("Item saved! Check console for data structure.");
   };
@@ -96,7 +103,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleSave}
-              className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-medium"
+              className="px-4 py-1.5 text-sm bg-primary text-white rounded hover:bg-primary/90 transition-colors font-medium"
             >
               Save
             </button>
@@ -130,7 +137,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.itemName}
                     onChange={handleInputChange}
                     placeholder="Name of item"
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
 
@@ -140,15 +147,23 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     <label className="block text-xs font-medium text-gray-700 mb-1.5">
                       Unit<span className="text-red-500">*</span>
                     </label>
-                    <button className="px-3 text-blue-600 hover:text-blue-700 font-medium text-xs whitespace-nowrap">
+                    <button
+                      onClick={() => setOpenUnit(true)}
+                      className="px-3 text-primary hover:text-primary/80 font-medium text-xs whitespace-nowrap"
+                    >
                       + New
                     </button>
                   </div>
+                  <AddUnitModal
+                    isOpen={openUnit}
+                    onClose={() => setOpenUnit(false)}
+                    onSave={handleSave}
+                  />
                   <select
                     name="unit"
                     value={formData.unit}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
                   >
                     <option value="">Select Unit</option>
                     <option value="pcs">Pieces</option>
@@ -162,7 +177,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                   <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Sell price<span className="text-red-500">*</span>
                   </label>
-                  <div className="flex">
+                  <div className="flex focus-within:ring-2 focus-within:ring-primary rounded">
                     <span className="inline-flex items-center px-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l text-sm">
                       ₹
                     </span>
@@ -172,9 +187,14 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                       value={formData.sellPrice}
                       onChange={handleInputChange}
                       placeholder="Sale-price"
-                      className="flex-1 min-w-0 px-2 py-1.5 text-sm border border-x-0 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="flex-1 min-w-0 px-2 py-1.5 text-sm border border-x-0 border-gray-300 outline-none"
                     />
-                    <select className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+                    <select
+                      name="sellPriceTax"
+                      value={formData.sellPriceTax}
+                      onChange={handleInputChange}
+                      className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs outline-none"
+                    >
                       <option>Excl. Tax</option>
                       <option>Incl. Tax</option>
                     </select>
@@ -192,7 +212,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.itemCode}
                     onChange={handleInputChange}
                     placeholder="Item code"
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
 
@@ -202,22 +222,28 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     <label className="block text-xs font-medium text-gray-700 mb-1.5">
                       Category
                     </label>
-                    <button className="px-3  text-blue-600 hover:text-blue-700 font-medium text-xs whitespace-nowrap">
+                    <button
+                      onClick={() => setOpenCategory(true)}
+                      className="px-3 text-primary hover:text-primary/80 font-medium text-xs whitespace-nowrap"
+                    >
                       + New
                     </button>
                   </div>
-                  <div className="flex gap-2">
-                    <select
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
-                    >
-                      <option value="">Select Category</option>
-                      <option value="electronics">Electronics</option>
-                      <option value="clothing">Clothing</option>
-                    </select>
-                  </div>
+                  <AddCategoryModal
+                    isOpen={openCategory}
+                    onClose={() => setOpenCategory(false)}
+                    onSave={handleSaveCategory}
+                  />
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
+                  >
+                    <option value="">Select Category</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                  </select>
                 </div>
 
                 {/* Brand */}
@@ -226,23 +252,22 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     <label className="block text-xs font-medium text-gray-700 mb-1.5">
                       Brand
                     </label>
-                    <button className="px-3 text-blue-600 hover:text-blue-700 font-medium text-xs whitespace-nowrap">
+                    <button className="px-3 text-primary hover:text-primary/80 font-medium text-xs whitespace-nowrap">
                       + New
                     </button>
                   </div>
-                  <div className="flex gap-2">
-                    <select
-                      name="brand"
-                      value={formData.brand}
-                      onChange={handleInputChange}
-                      className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
-                    >
-                      <option value="">Select Brand</option>
-                      <option value="brand1">Brand 1</option>
-                      <option value="brand2">Brand 2</option>
-                    </select>
-                  </div>
+                  <select
+                    name="brand"
+                    value={formData.brand}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
+                  >
+                    <option value="">Select Brand</option>
+                    <option value="brand1">Brand 1</option>
+                    <option value="brand2">Brand 2</option>
+                  </select>
                 </div>
+
                 {/* Item Description */}
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1.5">
@@ -254,12 +279,12 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     onChange={handleInputChange}
                     placeholder="Item description"
                     rows={2}
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none"
                   />
                 </div>
               </div>
 
-              {/* Upload Images - LOCAL VERSION */}
+              {/* Upload Images */}
               <div className="mt-4">
                 <LocalImageUpload
                   maxImages={5}
@@ -290,7 +315,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.mrp}
                     onChange={handleInputChange}
                     placeholder="MRP"
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
 
@@ -299,7 +324,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                   <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Purchase price
                   </label>
-                  <div className="flex">
+                  <div className="flex focus-within:ring-2 focus-within:ring-primary rounded">
                     <span className="inline-flex items-center px-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 rounded-l text-sm">
                       ₹
                     </span>
@@ -309,9 +334,14 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                       value={formData.purchasePrice}
                       onChange={handleInputChange}
                       placeholder="Purchase"
-                      className="flex-1 min-w-0 px-2 py-1.5 text-sm border border-x-0 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="flex-1 min-w-0 px-2 py-1.5 text-sm border border-x-0 border-gray-300 outline-none"
                     />
-                    <select className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+                    <select
+                      name="purchasePriceTax"
+                      value={formData.purchasePriceTax}
+                      onChange={handleInputChange}
+                      className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs outline-none"
+                    >
                       <option>Excl. Tax</option>
                       <option>Incl. Tax</option>
                     </select>
@@ -329,7 +359,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.hsnCode}
                     onChange={handleInputChange}
                     placeholder="HSN code"
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
 
@@ -342,7 +372,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     name="gstPercent"
                     value={formData.gstPercent}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
                   >
                     <option value="">Select Tax</option>
                     <option value="0">0%</option>
@@ -362,7 +392,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     name="cessPercent"
                     value={formData.cessPercent}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none appearance-none bg-white"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none bg-white"
                   >
                     <option value="">Select Cess</option>
                     <option value="0">0%</option>
@@ -376,20 +406,20 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                   <label className="block text-xs font-medium text-gray-700 mb-1.5">
                     Discount
                   </label>
-                  <div className="flex">
+                  <div className="flex focus-within:ring-2 focus-within:ring-primary rounded">
                     <input
                       type="text"
                       name="discount"
                       value={formData.discount}
                       onChange={handleInputChange}
                       placeholder="Discount"
-                      className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-r-0 border-gray-300 rounded-l focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-r-0 border-gray-300 rounded-l outline-none"
                     />
                     <select
                       name="discountType"
                       value={formData.discountType}
                       onChange={handleInputChange}
-                      className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="px-2 py-1.5 border border-l-0 border-gray-300 rounded-r bg-white text-xs outline-none"
                     >
                       <option>Amount</option>
                       <option>Percentage</option>
@@ -408,7 +438,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.offerText}
                     onChange={handleInputChange}
                     placeholder="Show offer"
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
               </div>
@@ -432,7 +462,7 @@ const CreateItemsDrawer = ({ isOpen, onClose }: CreateItemsDrawerProps) => {
                     value={formData.stock}
                     onChange={handleInputChange}
                     placeholder="Stock"
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
               </div>
