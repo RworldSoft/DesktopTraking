@@ -43,7 +43,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-gray-800">Add Category</h2>
@@ -65,7 +65,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Grocery, Electronics"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -79,7 +79,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             placeholder="Short description"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -91,7 +91,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as "Active" | "Inactive")}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
@@ -102,13 +102,13 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+            className="px-4 py-2 rounded-sm border border-gray-300 text-gray-700 hover:bg-gray-100"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+            className="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90"
           >
             Save Category
           </button>

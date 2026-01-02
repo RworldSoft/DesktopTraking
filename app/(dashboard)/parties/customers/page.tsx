@@ -18,14 +18,15 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import ItemsHeader from "../../inventory/items/components/header";
+
 import Filter from "../../inventory/items/components/filter";
+import CustomerHeader from "../components/CustomerHeader";
 
 
 export default function ItemsComponent() {
   return (
     <div className="w-full">
-      <ItemsHeader title="Customer" />
+      <CustomerHeader title="Customer" />
 
       {/* Filters Row */}
       <Filter />
